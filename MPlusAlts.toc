@@ -1,0 +1,6 @@
+## Interface: 90200
+## Title: The Fox-Has-Too-Many-Characters Addon
+## Author: JustNotAFox
+## Version: 0.1
+## SavedVariables: AccountKeyScores
+main.lua
