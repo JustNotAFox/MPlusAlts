@@ -13,12 +13,36 @@ function MPAInitData()
 	end
 end
 function MPAChatParse(text)
-	local mapString, keyLevel = string.match(text, '|Hkeystone:%d+:(%d+):(%d+)')
+	local mapString, keyLevel, affixId = string.match(text, '|Hkeystone:%d+:(%d+):(%d+):(%d+)')
+	local currentAffix = string.match(C_ChallengeMode.GetAffixInfo(affixId),'(%S+)')
 	if mapString == nil or keyLevel == nil then
 		return
 	end
 	local keyDungeonName = C_ChallengeMode.GetMapUIInfo(mapString)
 	print("Found keystone", keyLevel, keyDungeonName)
+	for charIndex in pairs(MPAAccountKeyScores) do
+		local charScore = MPAAccountKeyScores[charIndex][tonumber(mapString)]
+		if charScore == nil then
+			print(charIndex,"does not have this dungeon complete at all.")
+		else
+			for i, runInfo in pairs(charScore) do
+				if runInfo.name == currentAffix then
+					runLevel, runComplete = runInfo.level, runInfo.completed
+				end
+			end
+			if runLevel == nil then
+				print(charIndex,"only has a key completed for this dungeon on the other affix")
+			else
+				if runLevel < tonumber(keyLevel) then
+					print(charIndex,"has a lower level",runLevel,"key for this dungeon on this week's affix")
+				else 
+					if runLevel == toNumber(keyLevel) and not runComplete then
+						print(charIndex,"has an untimed run on the same level as this key")
+					end
+				end
+			end
+		end
+	end
 end
 local MPAEventFrame, MPAEventHandlers = CreateFrame("frame", "EventFrame"), {}
 function MPAEventHandlers:PLAYER_ENTERING_WORLD()
