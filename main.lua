@@ -2,6 +2,9 @@ function MPAInitData()
 	if MPAAccountKeyScores == nil then
 		MPAAccountKeyScores = {};
 	end
+	if UnitLevel("player") < 60 then
+		return
+	end
 	currChar = UnitName("player");
 	if MPAAccountKeyScores[currChar] == nil then
 		MPAAccountKeyScores[currChar] = {};
@@ -14,10 +17,10 @@ function MPAInitData()
 end
 function MPAChatParse(text)
 	local mapString, keyLevel, affixId = string.match(text, '|Hkeystone:%d+:(%d+):(%d+):(%d+)')
-	local currentAffix = string.match(C_ChallengeMode.GetAffixInfo(affixId),'(%S+)')
 	if mapString == nil or keyLevel == nil then
 		return
 	end
+	local currentAffix = string.match(C_ChallengeMode.GetAffixInfo(affixId),'(%S+)')
 	local keyDungeonName = C_ChallengeMode.GetMapUIInfo(mapString)
 	print("Found keystone", keyLevel, keyDungeonName)
 	for charIndex in pairs(MPAAccountKeyScores) do
@@ -36,7 +39,7 @@ function MPAChatParse(text)
 				if runLevel < tonumber(keyLevel) then
 					print(charIndex,"has a lower level",runLevel,"key for this dungeon on this week's affix")
 				else 
-					if runLevel == toNumber(keyLevel) and not runComplete then
+					if runLevel == tonumber(keyLevel) and not runComplete then
 						print(charIndex,"has an untimed run on the same level as this key")
 					end
 				end
