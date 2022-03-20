@@ -2,5 +2,5 @@
 ## Title: The Fox-Has-Too-Many-Characters Addon
 ## Author: JustNotAFox
 ## Version: 0.1
-## SavedVariables: AccountKeyScores
+## SavedVariables: MPAAccountKeyScores
 main.lua
